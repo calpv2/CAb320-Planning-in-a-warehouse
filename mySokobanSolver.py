@@ -138,8 +138,43 @@ def check_elem_action_seq(warehouse, action_seq):
     '''
     
     ##         "INSERT YOUR CODE HERE"
+    moves = {
+        'Left':  (-1, 0),
+        'Right': (1, 0),
+        'Up':    (0, -1),
+        'Down':  (0, 1)
+    }
+    # work on a copy so the original warehouse is not modified
+    worker = warehouse.worker
+    boxes = list(warehouse.boxes)
+    walls = set(warehouse.walls)
     
-    raise NotImplementedError()
+    for action in action_seq:
+        if action not in moves:
+            return 'Impossible'
+        
+        dx, dy = moves[action]
+        next_worker = (worker[0] + dx, worker[1] + dy)
+        
+        #cant move into a wall
+        if next_worker in walls:
+            return 'Impossible'
+        
+        #try to push box if there is one
+        if next_worker in boxes:
+            next_box = (next_worker[0] + dx, next_worker[1] + dy)
+            
+            # cannot push box into a wall or another box
+            if next_box in walls or next_box in boxes:
+                return 'Impossible'
+            
+            #move the box
+            box_index = boxes.index(next_worker)
+            boxes[box_index] = next_box
+        # move the worker
+        worker = next_worker
+    
+    return warehouse.copy(worker=worker, boxes=boxes).__str__()
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
