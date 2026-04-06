@@ -42,8 +42,8 @@ def my_team():
     of triplet of the form (student_number, first_name, last_name)
     
     '''
-#    return [ (1234567, 'Ada', 'Lovelace'), (1234568, 'Grace', 'Hopper'), (1234569, 'Eva', 'Tardos') ]
-    raise NotImplementedError()
+
+    return [(11961511, 'James', 'Galea'), (1234568, 'Pavel', 'Glivinskiy'), (12062863, 'Zachary', 'Allouet') ]
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -178,6 +178,33 @@ def check_elem_action_seq(warehouse, action_seq):
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+def weight_calc(push=False, box_pos = None, targets = None, taboo_cells = None, box_weight = 1):
+    #input value definition
+    #push: if a box is being pushed 
+    #box_pos: the boxes new position after having been pushed
+    #targets: list of goal positions for crates
+    #taboo_cells: taboo positions
+    #box_weight: weight of the box
+    
+
+    dist = min(abs(box_pos[0]-t[0]) + abs(box_pos[1]-t[1]) for t in targets)
+
+    #walking cost
+    if not push:
+        return 1
+    cost = 0
+    
+    #incorporating box weight
+    cost += box_weight
+
+    #taboo cost
+    if taboo_cells and box_pos in taboo_cells:
+        cost += 1000
+
+    #cost of getting closer to goal 
+    if targets:
+        cost += dist * 0.5
+    return cost
 
 def solve_weighted_sokoban(warehouse):
     '''
@@ -202,6 +229,14 @@ def solve_weighted_sokoban(warehouse):
             C is the total cost of the action sequence C
 
     '''
+    taboo = taboo_cells(warehouse)
+    # define taboo cells on the warehouse plan
+    # check action element sequence for legality 
+    #apply the weight system to the actions taken 
+    # (highly recommended) a state determiner to have a set class for when the ai is searching and when it is moving and when it is solving 
+    #heuristics search to be used for A* search
+    #A* search, which essentially solves everything 
+    
     
     raise NotImplementedError()
 
