@@ -686,7 +686,7 @@ taboo_set = taboo_cells(wh)
 
 problem = SokobanProblem(wh, taboo_set)
 
-solution_node = astar_tree_search(problem, h=problem.h)
+solution_node = astar_graph_search(problem, h=problem.h)
 if solution_node is None:
     print("No solution found")
     actions = None
