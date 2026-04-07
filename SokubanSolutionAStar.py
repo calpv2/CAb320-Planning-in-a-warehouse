@@ -673,11 +673,17 @@ class SokobanProblem(search.Problem):
         
     def h(self, node):
         _, boxes = node.state
-        total = 0   
-        for (bx, by) in boxes:
-            total += min(abs(bx - gx) + abs(by - gy)             #checks manhattan distance from goal
-                         for (gx, gy) in self.goals)   
-        return total
+        boxes = list(boxes)
+        goals = list(self.goals)
+    
+        best = float('inf')
+    
+        for perm in itertools.permutations(goals):     #checks the permutation of each box to each goal manhattan distance and produces the smallest possibility
+            total = 0                                  # template for using itertools provide by ChatGPT
+            for b, g in zip(boxes, perm):
+                total += abs(b[0] - g[0]) + abs(b[1] - g[1])
+            best = min(best, total)
+        return best
 
 wh = Warehouse()
 wh.load_warehouse('warehouse_03.txt')
