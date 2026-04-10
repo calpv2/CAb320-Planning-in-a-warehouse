@@ -675,14 +675,21 @@ class SokobanProblem(search.Problem):
         _, boxes = node.state
         boxes = list(boxes)
         goals = list(self.goals)
+
+        weights = dict(zip(self.warehouse.boxes, self.warehouse.weights))
     
         best = float('inf')
     
-        for perm in itertools.permutations(goals):     #checks the permutation of each box to each goal manhattan distance and produces the smallest possibility
-            total = 0                                  # template for using itertools provide by ChatGPT
+        for perm in itertools.permutations(goals):
+            total = 0
+    
             for b, g in zip(boxes, perm):
-                total += abs(b[0] - g[0]) + abs(b[1] - g[1])
+                weight = weights.get(b, 1) 
+                dist = abs(b[0] - g[0]) + abs(b[1] - g[1])
+                total += dist * weight
+    
             best = min(best, total)
+    
         return best
 
 wh = Warehouse()
